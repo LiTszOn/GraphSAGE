@@ -17,8 +17,8 @@ WALK_LEN=5
 N_WALKS=50
 
 def load_data(prefix, normalize=True, load_walks=False):
-    G_data = json.load(open(prefix + "-G.json"))
-    G = json_graph.node_link_graph(G_data)
+    G_data = json.load(open(prefix + "-G.json")) #graph data
+    G = json_graph.node_link_graph(G_data) #Returns data in node-link format that is suitable for JSON serialization and use in Javascript documents.
     if isinstance(G.nodes()[0], int):
         conversion = lambda n : int(n)
     else:
@@ -62,17 +62,17 @@ def load_data(prefix, normalize=True, load_walks=False):
     if normalize and not feats is None:
         from sklearn.preprocessing import StandardScaler
         train_ids = np.array([id_map[n] for n in G.nodes() if not G.node[n]['val'] and not G.node[n]['test']])
-        train_feats = feats[train_ids]
-        scaler = StandardScaler()
-        scaler.fit(train_feats)
-        feats = scaler.transform(feats)
+        train_feats = feats[train_ids] #np.load(prefix + "-feats.npy")
+        scaler = StandardScaler()#standardize scala with mean and variance
+        scaler.fit(train_feats)#Compute the mean and std to be used for later scaling
+        feats = scaler.transform(feats)#Perform standardization by centering and scaling
     
     if load_walks:
         with open(prefix + "-walks.txt") as fp:
             for line in fp:
                 walks.append(map(conversion, line.split()))
 
-    return G, feats, id_map, walks, class_map
+    return G, feats, id_map, walks, class_map #graph, ,id_map is a dictionary
 
 def run_random_walks(G, nodes, num_walks=N_WALKS):
     pairs = []
