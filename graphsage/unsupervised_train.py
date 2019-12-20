@@ -134,6 +134,9 @@ def train(train_data, test_data=None):
     features = train_data[1]
     id_map = train_data[2]
 
+    print("G: " + str(G))
+    print("features: " + str(features))
+    print("id_map: " + str(id_map))
     if not features is None:
         # pad with dummy zero vector
         features = np.vstack([features, np.zeros((features.shape[1],))])
