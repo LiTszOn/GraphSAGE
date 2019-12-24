@@ -148,10 +148,13 @@ def train(train_data, test_data=None):
             placeholders, batch_size=FLAGS.batch_size,
             max_degree=FLAGS.max_degree, 
             num_neg_samples=FLAGS.neg_sample_size,
-            context_pairs = context_pairs)
+            context_pairs = context_pairs) #a useful object
     adj_info_ph = tf.placeholder(tf.int32, shape=minibatch.adj.shape)
     adj_info = tf.Variable(adj_info_ph, trainable=False, name="adj_info")
-
+    # with tf.Session() as sess:
+    #     sess.run(tf.global_variables_initializer())
+    #     sess.run(tf.local_variables_initializer())
+    #     print("adj_info: " + str(sess.run(adj_info)))
     if FLAGS.model == 'graphsage_mean':
         # Create model
         sampler = UniformNeighborSampler(adj_info)

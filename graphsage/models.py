@@ -177,7 +177,7 @@ class GeneralizedModel(Model):
 
 # SAGEInfo is a namedtuple that specifies the parameters 
 # of the recursive GraphSAGE layers
-SAGEInfo = namedtuple("SAGEInfo",
+    SAGEInfo = namedtuple("SAGEInfo",
     ['layer_name', # name of the layer (to get feature embedding etc.)
      'neigh_sampler', # callable neigh_sampler constructor
      'num_samples',
