@@ -142,8 +142,8 @@ def train(train_data, test_data=None):
         features = np.vstack([features, np.zeros((features.shape[1],))])
 
     context_pairs = train_data[3] if FLAGS.random_context else None
-    placeholders = construct_placeholders()
-    minibatch = EdgeMinibatchIterator(G, 
+    placeholders = construct_placeholders() #returns a dictionary of placeholder
+    minibatch = EdgeMinibatchIterator(G, #produce a bunch of minibatch
             id_map,
             placeholders, batch_size=FLAGS.batch_size,
             max_degree=FLAGS.max_degree, 
@@ -157,7 +157,7 @@ def train(train_data, test_data=None):
     #     print("adj_info: " + str(sess.run(adj_info)))
     if FLAGS.model == 'graphsage_mean':
         # Create model
-        sampler = UniformNeighborSampler(adj_info)
+        sampler = UniformNeighborSampler(adj_info)#to wrap the lookup function
         layer_infos = [SAGEInfo("node", sampler, FLAGS.samples_1, FLAGS.dim_1),
                             SAGEInfo("node", sampler, FLAGS.samples_2, FLAGS.dim_2)]
 
@@ -168,7 +168,7 @@ def train(train_data, test_data=None):
                                      layer_infos=layer_infos, 
                                      model_size=FLAGS.model_size,
                                      identity_dim = FLAGS.identity_dim,
-                                     logging=True)
+                                     logging=True) #set training parameters and define loss function etc
     elif FLAGS.model == 'gcn':
         # Create model
         sampler = UniformNeighborSampler(adj_info)
@@ -305,7 +305,7 @@ def train(train_data, test_data=None):
             if total_steps % FLAGS.print_every == 0:
                 print("Iter:", '%04d' % iter, 
                       "train_loss=", "{:.5f}".format(train_cost),
-                      "train_mrr=", "{:.5f}".format(train_mrr), 
+                      "train_mrr=", "{:.5f}".format(train_mrr),#Mean reciprocal rank
                       "train_mrr_ema=", "{:.5f}".format(train_shadow_mrr), # exponential moving average
                       "val_loss=", "{:.5f}".format(val_cost),
                       "val_mrr=", "{:.5f}".format(val_mrr), 
